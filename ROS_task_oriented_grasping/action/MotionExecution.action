@@ -1,0 +1,39 @@
+# Goal
+
+# EE pose sequence
+geometry_msgs/Pose[] ee_trajectory
+# Gripper grasp/open states at each EE pose
+bool[] gripper_state
+
+---
+
+# Result
+
+# Time duration of motion plan execution
+duration time_duration
+
+# Sequence index (1 to n) of EE pose upto which motion plan has been executed
+# 0 does not represent first EE pose (Indexing from 1 to n)
+uint16 ee_pose_idx
+
+# Result of execution
+  uint8 SUCCESS = 1
+  uint8 MOTION_PLAN_FAILURE = 2
+  uint8 MOTION_EXECUTION_FAILURE = 3
+uint8 result
+
+---
+
+# Feedback
+
+# Time since start of execution
+duration time_duration
+
+# Sequence index (1 to n) of EE pose upto which motion plan has been executed
+# 0 does not represent first EE pose (Indexing from 1 to n)
+uint16 ee_pose_idx
+
+# Status of execution
+  uint8 DETERMINING_MOTION_PLAN = 1
+  uint8 EXECUTING_MOTION_PLAN = 2
+uint8 status
