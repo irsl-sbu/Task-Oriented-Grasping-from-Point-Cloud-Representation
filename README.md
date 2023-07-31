@@ -5,6 +5,7 @@ In this paper, we study the problem of task-oriented grasp synthesis from partia
 
 
 Citation:
+
 @inproceedings{patankar2023task,
   title={Task-Oriented Grasping with Point Cloud Representation of Objects},
   author={Patankar, Aditya and Phi, Khiem and Mahalingam, Dasharadhan and Chakraborty, Nilanjan and Ramakrishnan, IV},
