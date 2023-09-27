@@ -69,6 +69,22 @@ html, body {
   margin: auto;
 }
 
+.title-logo {
+  flex-basis: min-content;
+}
+
+.text-logo-two-line {
+  width: 60%;
+  min-width: 375px;
+  padding: 0.5cm;
+  margin: auto;
+}
+
+.content-title-text {
+  margin: 2em;
+  margin-bottom: 0.5em;
+}
+
 .inline-elemtent {
   display: inline-block;
 }
@@ -80,6 +96,16 @@ html, body {
   margin: 1em;
 }
 
+.iframe-container {
+  width: 100%;
+  padding-top: 0px;
+}
+
+.responsive-iframe {
+  width: 640px;
+  height: 360px;
+}
+
 .flex-container {
   display: flex;
   flex: 10%;
@@ -88,11 +114,283 @@ html, body {
   justify-content: center;
 }
 
+.table-container {
+  border-spacing: 0.25em;
+  border-collapse: separate;
+  width: 60%;
+}
+
+td {
+  padding: 0 0.5em;
+}
+
 p {
   text-align: justify;
-  width: 30cm;
-  font-size: 1.25em;
+  width: 75%;
+  font-size: 1em;
   line-height: 1.5;
+}
+
+h1, .title-container {
+  font-family: 'Zilla Slab', serif;
+  font-weight: 700;
+  font-size: 1.5em;
+}
+
+.subsection-heading {
+  font-size: 1em;
+}
+
+.section-heading {
+  font-family: 'Zilla Slab', serif;
+  font-weight: 500;
+  font-size: 1.5em;
+  color: var(--sbu-red);
+}
+
+.serif-content {
+  font-family: 'Zilla Slab', serif;
+  font-weight: 400;
+}
+
+.sans-serif-content {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+}
+
+.media-container {
+  width:42.5%;
+  min-width: 750px;
+}
+
+.monospace-content {
+  font-family: monospace;
+}
+
+.mobile-add-content {
+  display: none;
+}
+
+.irsl-horz-text-logo-max-w {
+  margin-top: 10px;
+  margin-bottom: auto;
+  flex-basis: min-content;
+}
+
+.irsl-horz-text-logo-new-line {
+  margin-top: 10px;
+  margin-bottom: auto;
+}
+
+.irsl-vert-text-logo {
+  margin-top: 10px;
+  margin-bottom: auto;
+}
+
+.min-w-del-container {
+  display: table-cell;
+}
+
+.min-w-add-container {
+  display: none;
+}
+
+.min-w-del-container {
+  display: inline;
+}
+
+.min-w-block-container {
+  display: inline;
+}
+
+.med-w-del-container {
+  display: inline;
+}
+
+.med-w-block-container {
+  display: inline;
+}
+
+@media only screen and (max-width: 600px) {
+  .media-container {
+    width:92.5%;
+    min-width: 0;
+  }
+
+  .irsl-horz-text-logo-max-w {
+    display: none;
+  }
+
+  .irsl-horz-text-logo-new-line {
+    display: none;
+  }
+
+  .irsl-vert-text-logo {
+    display: block;
+  }
+
+  .min-w-del-container {
+    display: none;
+  }
+
+  .min-w-add-container {
+    display: table-cell;
+  }
+
+  .min-w-del-container {
+    display: none;
+  }
+
+  .min-w-block-container {
+    display: block;
+  }
+
+  .med-w-del-container {
+    display: none;
+  }
+
+  .med-w-block-container {
+    display: block;
+  }
+
+  .responsive-iframe {
+    width: 256px;
+    height: 144px;
+  }
+
+  .img-fit {
+    width: 75%;
+    min-width: 0;
+    padding: 10px;
+  }
+
+  .title-logo {
+    flex-basis: fit-content;
+  }
+
+  .text-logo-two-line {
+    min-width: 0px;
+    width: 80%;
+  }
+
+  .content-title-text {
+    margin: 10px;
+  }
+
+  .table-container {
+    font-size: 0.75em;
+  }
+
+  .subsection-heading {
+    font-size: 1em;
+  }
+
+  .section-heading {
+    font-size: 0.8em;
+  }
+
+  .serif-content {
+    font-size: 0.8em;
+  }
+
+  .sans-serif-content {
+    font-size: 0.8em;
+  }
+
+  .monospace-content {
+    font-size: 0.8em;
+  }
+
+  p {
+    width: 95%;
+  }
+
+  .mobile-add-content {
+    display: inline;
+  }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 810px) {
+  .media-container {
+    width:92.5%;
+    min-width: 0;
+  }
+
+  .irsl-horz-text-logo-max-w {
+    display: none;
+  }
+
+  .irsl-horz-text-logo-new-line {
+    display: none;
+  }
+
+  .irsl-vert-text-logo {
+    display: block;
+  }
+
+  .min-w-del-container {
+    display: none;
+  }
+
+  .min-w-add-container {
+    display: table-cell;
+  }
+
+  .min-w-del-container {
+    display: none;
+  }
+
+  .min-w-block-container {
+    display: block;
+  }
+
+  .med-w-del-container {
+    display: none;
+  }
+
+  .med-w-block-container {
+    display: block;
+  }
+
+  .responsive-iframe {
+    width: 426px;
+    height: 240px;
+  }
+
+}
+
+@media only screen and (min-width: 810px) and (max-width: 850px) {
+  .med-w-del-container {
+    display: none;
+  }
+
+  .med-w-block-container {
+    display: block;
+  }
+}
+
+@media only screen and (min-width: 810px) and (max-width: 1250px) {
+  .irsl-horz-text-logo-max-w {
+    display: none;
+  }
+
+  .irsl-horz-text-logo-new-line {
+    display: block;
+  }
+
+  .irsl-vert-text-logo {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 1250px) {
+  .irsl-horz-text-logo-new-line {
+    display: none;
+  }
+
+  .irsl-vert-text-logo {
+    display: none;
+  }
 }
 
 :root {

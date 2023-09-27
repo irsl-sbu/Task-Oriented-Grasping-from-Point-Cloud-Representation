@@ -8,48 +8,56 @@
     <meta name="viewport" content="initial-scale=1, width=device-width">
     <meta property="og:title" content="Interacting Robotic Systems Laboratory">
     <meta property="og:description" content="Human guided planning for complex manipulation tasks using the screw geometry of motion.">
-    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script>
-      MathJax = {
-        tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-        svg: { fontCache: 'global'}
-      };
-    </script>
-    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"> </script>
     <title>IRSL | Task-Oriented Grasping with Point Cloud Representation of Objects</title>
     <link rel="shortcut icon" type="image/png" href="./media/50.png"/>
     <link rel="icon" type="image/x-icon" href="./media/favicon.ico"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Zilla+Slab:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   </head>
 
-  <body class="centered" style="font-family: MJXTEX">
-    <header
+  <body class="centered">
+    <header>
       <div class="flex-container">
-        <div style="flex-basis: min-content">
+        <div class="title-logo">
           <a href="https://www.stonybrook.edu/commcms/ceas/" target="_blank">
-            <img  src="./media/SBU/SBU_CoEngineering_2clr.jpg"
+            <img  src="./media/sbu/sbu-college-engineering.jpg"
                   alt="Stony Brook University College of Engineering and Applied Sciences"
                   class="img-fit">
           </a>
         </div>
-        <div style="flex-basis: min-content">
-          <img  src="./media/IRSL_Logo.png"
+        <div class="title-logo">
+          <img  src="./media/irsl-logo.png"
                 alt="IRSL Logo"
                 class="img-fit">
         </div>
-        <div style="margin-top: 0.2cm; margin-bottom: auto; flex-basis: min-content"> 
-          <img  src="./media/IRSL_Text_Logo.png"
+        <div class="irsl-horz-text-logo-max-w"> 
+          <img  src="./media/irsl-text-logo-horz.png"
                 alt="Interacting Robotic Systems Laboratory"
                 class="img-fit"
-                style="width: 60%; min-width: 20cm">
+                style="width: 60%; min-width: 750px">
+        </div>
+      </div>
+      <div>
+        <div class="irsl-horz-text-logo-new-line"> 
+          <img  src="./media/irsl-text-logo-horz.png"
+                alt="Interacting Robotic Systems Laboratory"
+                class="img-fit"
+                style="width: 60%; min-width: 750px">
+        </div>
+      </div>
+      <div>
+        <div class="irsl-vert-text-logo"> 
+          <img  src="./media/irsl-text-logo-two-line.png"
+                alt="Interacting Robotic Systems Laboratory"
+                class="text-logo-two-line">
         </div>
       </div>
     </header>
-    <h1 style="margin-top: 2em; margin-bottom: 0.5em; font-size: 1.5em">
-      $\textbf{Task-Oriented Grasping with Point Cloud Representation of Objects}$
+    <h1 class="content-title-text">
+      Task-Oriented Grasping with Point Cloud Representation of Objects
     </h1>
     <div class="center-container">
-      <!--table style="width:25cm"-->
       <table style="width:27cm">
         <tr style="font-size: 1.25em">
           <td>Aditya Patankar</td>
@@ -67,42 +75,38 @@
       </table>
     </div>
     <div class="center-container">
-      <table style="width:15cm; color: var(--sbu-red)">
-        <tr style="font-size: 1.25em">
+      <table class="section-heading" style="width:15cm;">
+        <tr class="subsection-heading">
           <td>Stony Brook University</td>
         </tr>
       </table>
     </div>
     <div>
-      <img  src="./media/Figures/Overview_V2.png"
-            alt="Graphical Abstract"
-            style="width: 20cm">
+      <img  class="media-container"
+            src="./media/figures/graphical-abstract.png"
+            alt="Graphical Abstract">
     </div>
     <div class="center-container">
       <p>
-        <span style="color: var(--sbu-red);">$\textbf{Abstract:}$</span>
+        <span class="section-heading" style="color: var(--sbu-red);">Abstract:</span>
         <br>
-        In this paper, we study the problem of task-oriented grasp synthesis from partial point cloud data using an eye-in-hand camera configuration. In task-oriented grasp synthesis, a grasp has to be selected so that the object is not lost during manipulation, and it is also ensured that adequate force/moment can be applied to perform the task. We formalize the notion of a gross manipulation task as a constant screw motion (or a sequence of constant screw motions) to be applied to the object after grasping. Using this notion of task, and a corresponding grasp quality metric developed in our prior work, we use a neural network to approximate a function for predicting the grasp quality metric on a cuboid shape. We show that by using a bounding box obtained from the partial point cloud of an object, and the grasp quality metric mentioned above, we can generate a good grasping region on the bounding box that can be used to compute an antipodal grasp on the actual object. Our algorithm does not use any manually labelled data or grasping simulator, thus making it very efficient to implement and integrate with screw linear interpolation-based motion planners. We present simulation as well as experimental results showing the effectiveness of our approach.
+        <span class="sans-serif-content">In this paper, we study the problem of task-oriented grasp synthesis from partial point cloud data using an eye-in-hand camera configuration. In task-oriented grasp synthesis, a grasp has to be selected so that the object is not lost during manipulation, and it is also ensured that adequate force/moment can be applied to perform the task. We formalize the notion of a gross manipulation task as a constant screw motion (or a sequence of constant screw motions) to be applied to the object after grasping. Using this notion of task, and a corresponding grasp quality metric developed in our prior work, we use a neural network to approximate a function for predicting the grasp quality metric on a cuboid shape. We show that by using a bounding box obtained from the partial point cloud of an object, and the grasp quality metric mentioned above, we can generate a good grasping region on the bounding box that can be used to compute an antipodal grasp on the actual object. Our algorithm does not use any manually labelled data or grasping simulator, thus making it very efficient to implement and integrate with screw linear interpolation-based motion planners. We present simulation as well as experimental results showing the effectiveness of our approach.</span>
       </p>
     </div>
 
     <div class="center-container">
       <p>
-        <span style="color: var(--sbu-red);">$\textbf{Video Synopsis:}$</span>
+        <span class="section-heading" style="color: var(--sbu-red);">Video Synopsis:</span>
       </p>
     </div>
 
-    <div class="center-container">
-      <table>
-        <tr>
-          <td><iframe width="640" height="360" src="https://www.youtube.com/embed/gRcCUs3rNzs"> </iframe></td>
-        </tr>
-      </table>
+    <div class="iframe-container">
+      <iframe class="responsive-iframe" src="https://www.youtube.com/embed/gRcCUs3rNzs"> </iframe>
     </div>
 
     <div class="center-container">
       <p>
-        <span style="color: var(--sbu-red);">$\textbf{Overview of Algorithm:}$</span>
+        <span class="section-heading"  style="color: var(--sbu-red);">Overview of Algorithm:</span>
       </p>
     </div>
     
@@ -124,7 +128,7 @@
     
     <div class="center-container">
       <p>
-        <span style="color: var(--sbu-red);">$\textbf{Results on Simulated Data:}$</span>
+        <span class="section-heading"  style="color: var(--sbu-red);">Results on Simulated Data:</span>
       </p>
     </div>
     
@@ -143,33 +147,24 @@
             alt="Graphical Abstract"
             style="width: 50%">
     </div>
-
+    
+    
     <div class="center-container">
       <p>
-        <span style="color: var(--sbu-red);">$\textbf{Paper:}$</span>
+        <span class="section-heading" style="color: var(--sbu-red);">Paper:</span>
         <br>
-        $\textbf{Task-Oriented Grasping with Point Cloud Representation of Objects}$
+        <span class="sans-serif-content">
+          <span style="font-family: 'Zilla Slab', serif; font-weight: 600; font-size: 1.25em">Task-Oriented Grasping with Point Cloud Representation of Objects</span>
+          <br>
+          Aditya Patankar, Khiem Phi, Dasharadhan Mahalingam, Nilanjan Chakraborty and IV Ramakrishnan
+          <br>
+          <span style="font-style: italic">IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), Detroit 2023</span>
+        </span>
         <br>
-        Aditya Patankar, Khiem Phi, Dasharadhan Mahalingam, Nilanjan Chakraborty and IV Ramakrishnan
         <br>
-        IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), Detroit 2023
+        <span class="section-heading" style="color: var(--sbu-red);">Cite:</span>
         <br>
-        <br>
-        
-        <!--
-        <span style="color: var(--sbu-red);">$\textbf{Links:}$</span>
-        <br>
-        $\textbf{Extended Version:}$
-        <a href="https://arxiv.org/abs/2209.05672" target="_blank"
-           style="font-family: monospace">
-          arxiv.org/abs/2209.05672
-        </a>
-        <br><br>
-        -->
-        
-        <span style="color: var(--sbu-red);">$\textbf{Cite:}$</span>
-        <br>
-        <span style="font-family: monospace">
+        <span class="monospace-content" style="display: inline-block;">
         @inproceedings{patankar2023task,<br>
         &emsp;&emsp;title={Task-Oriented Grasping with Point Cloud Representation of Objects},<br>
         &emsp;&emsp;author={Patankar, Aditya and Phi, Khiem and Mahalingam, Dasharadhan and Chakraborty, Nilanjan and Ramakrishnan, IV},<br>
@@ -181,66 +176,66 @@
         
         <br>
         <br>
-        <span style="color: var(--sbu-red);">$\textbf{Code:}$</span>
+        <span class="section-heading" style="color: var(--sbu-red);">Code:</span>
         <br>
         <a href="https://github.com/irsl-sbu/Task-Oriented-Grasping-from-Point-Cloud-Representation" target="_blank"
            style="font-family: monospace">
           github.com/irsl-sbu/Task-Oriented-Grasping-from-Point-Cloud-Representation
         </a>
         <br><br>
-        
     </div>
+        
     
     <div class="center-container">
     <p>
-        <span style="color: var(--sbu-red);">$\textbf{Related Readings:}$</span> 
+        <span class="section-heading" style="color: var(--sbu-red);">Related Readings:</span> 
         <br>
-        $\textbf{Computing a Task-Dependent Grasp Metric Using Second-Order Cone Programs}$
-        <br>
-        Amin Fakhari, Aditya Patankar, Jiayin Xie and Nilanjan Chakraborty 
-        <br>
-        IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2021
-        <br> 
+        <span class="sans-serif-content">
+		<span style="font-family: 'Zilla Slab', serif; font-weight: 600; font-size: 1.25em">Computing a Task-Dependent Grasp Metric Using Second-Order Cone Programs</span>
+		<br>
+		Amin Fakhari, Aditya Patankar, Jiayin Xie and Nilanjan Chakraborty 
+		<br>
+		<span style="font-style: italic">IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2021</span>
+		<br> 
+        </span>
         
+        <span class="section-heading" style="color: var(--sbu-red);">Related Readings:</span> 
         <br>
-        $\textbf{Motion and Force Planning for Manipulating Heavy Objects by Pivoting}$
-        <br>
-        Amin Fakhari, Aditya Patankar and Nilanjan Chakraborty 
-        <br>
-        IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2021
-        <br> 
+        <span class="sans-serif-content">
+		<span style="font-family: 'Zilla Slab', serif; font-weight: 600; font-size: 1.25em">Motion and Force Planning for Manipulating Heavy Objects by Pivoting</span>
+		<br>
+		Amin Fakhari, Aditya Patankar and Nilanjan Chakraborty 
+		<br>
+		<span style="font-style: italic">IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS), 2021</span>
+		<br> 
+        </span>
         
+        <span class="section-heading" style="color: var(--sbu-red);">Related Readings:</span> 
         <br>
-        $\textbf{Human-Guided Planning for Complex Manipulation Tasks using the Screw Geometry of Motion}$
-        <br>
-        Dasharadhan Mahalingam and Nilanjan Chakraborty 
-        <br>
-        IEEE International Conference on Robotics and Automation (ICRA), 2023
-        <br> 
+        <span class="sans-serif-content">
+		  <span style="font-family: 'Zilla Slab', serif; font-weight: 600; font-size: 1.25em">Human-Guided Planning for Complex Manipulation Tasks Using the Screw Geometry of Motion</span>
+		<br>
+		Dasharadhan Mahalingam and Nilanjan Chakraborty 
+		<br>
+		<span style="font-style: italic">International Conference on Robotics and Automation (ICRA), 2023</span>
+		<br> 
+        </span>
          
     </div>
     
-    
-
-    <!--
-    <p id="my-equation"> </p>
-    <script>
-      $(document).ready(function(){
-        $("#my-equation").html("$(\\mathbf{D}_1, \\mathbf{D}_2) = min\\left(||\\mathbf{Q}_1 - \\mathbf{Q}_2||, ||\\mathbf{Q}_1 + \\mathbf{Q}_2||\\right)$")
-        //$("#my-equation").html("$a=0$")
-      });
-    </script>
-    -->
-    
-    
   </body>
 
-  <footer style="font-size: 1em; font-family: sans-serif; line-height:1.5;">
-    <a href="https://sites.google.com/a/stonybrook.edu/robotics/" target="_blank">Interacting Robotic Systems Laboratory</a> &bull;
-    <a href="https://me.stonybrook.edu/" target="_blank">Department of Mechanical Engineering</a> &bull;
-    <a href="https://www.stonybrook.edu/" target="_blank">Stony Brook University</a>
+  <footer class="sans-serif-content" style="line-height:1.5; background: var(--sbu-light-grey);">
     <br>
-    133 Heavy Engineering, Stony Brook University, Stony Brook, NY 11794
+    <a class="med-w-block-container" href="https://sites.google.com/a/stonybrook.edu/robotics/" target="_blank">Interacting Robotic Systems Laboratory</a><span class="med-w-del-container"> &bull;</span>
+    <a class="med-w-block-container" href="https://me.stonybrook.edu/" target="_blank">Department of Mechanical Engineering</a><span class="med-w-del-container"> &bull;</span>
+    <a class="med-w-block-container" href="https://www.stonybrook.edu/" target="_blank">Stony Brook University</a>
+    <br class="med-w-del-container">
+    <span class="med-w-block-container">133 Heavy Engineering,</span>
+    <span class="med-w-block-container">Stony Brook University,</span>
+    <span class="med-w-block-container">Stony Brook, NY 11794</span>
+    <br span="med-w-del-container">
+    <br>
   </footer>
 
 </html>
