@@ -18,7 +18,6 @@ Citation:
   year={2023},
   organization={IEEE}
 }
-<<<<<<< HEAD
 ```
 
 # Installation 
