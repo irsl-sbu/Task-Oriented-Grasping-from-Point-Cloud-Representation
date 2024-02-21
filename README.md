@@ -55,10 +55,3 @@ python -u main_pivoting.py --filename partial_point_cloud/cheezit_cracker_box.pl
 ```
 
 3. NOTE: Grasp synthesis for pouring using sensor data as well as for partial point clouds obtained from PyBullet to be updated soon. For further inquiries contact:  Aditya Patankar (aditya.patankar@stonybrook.edu)
-=======
-
-Executable Code with examples (partial point cloud and corresponding screw axis) coming soon.
-For questions and inquiries please contact:
-Aditya Patankar
-aditya.patankar@stonybrook.edu
->>>>>>> 61838e696b67d206411727d999af3e32c53c91f5
