@@ -1,3 +1,5 @@
+# By: Aditya Patankar
+
 # Open3D for point cloud processing and visualization
 import open3d as o3d
 
@@ -62,6 +64,9 @@ class point_cloud(object):
 
       self.R_bounding_box = None
       self.p_bounding_box = None
+
+      # Additional variable to store the pose of the bounding box as a 4x4 matrix:
+      self.g_bounding_box = None
 
       self.R_local = None
       self.p_local = None
@@ -248,7 +253,7 @@ class point_cloud(object):
 
       # Position of the contact references frame:
       self.position_C1 = None
-      self.position_c2 = None
+      self.position_C2 = None
 
       # Pose of the end-effector reference expressed as a 4x4 matrix (element of SE(3)):
       # Note: The pose of the contact reference frames is expressed with respect to the object reference frame. 
@@ -474,7 +479,6 @@ class point_cloud(object):
    '''Function to compute the oriented bounding box using the rotating calipers algorithm 
       after all the points have been transferred to the object base frame computed using the 
       axis aligned bounding box:'''
-   
    def compute_obb_rotating_calipers(self):
       projected_points_object_frame = np.zeros([self.transformed_points_object_frame.shape[0], self.transformed_points_object_frame.shape[1]])
     
@@ -603,6 +607,12 @@ class point_cloud(object):
       self.R_bounding_box[:, 1] = y_axis
       self.R_bounding_box[:, 2] = z_axis
       self.p_bounding_box = np.reshape(center, [3,1])
+
+      # Pose of the bounding box:
+      self.g_bounding_box = np.zeros([4,4])
+      self.g_bounding_box[0:3, 0:3] = self.R_bounding_box
+      self.g_bounding_box[0:3, 3] = np.reshape(self.p_bounding_box, [3])
+      self.g_bounding_box[3,3] = 1
 
    '''Function to transform the object point cloud and its bounding box to an object reference frame based on the 
    bounding box: '''
