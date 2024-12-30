@@ -57,6 +57,7 @@ class point_cloud(object):
 
       self.R_base = None
       self.p_base = None
+      self.g_base = None
 
       self.g_base_cam = None
       self.R_base_cam = None
@@ -76,6 +77,10 @@ class point_cloud(object):
       self.x_dim = None
       self.y_dim = None
       self.z_dim = None
+
+      # Additional attribute introduced to determine pivoting edge:
+      self.edge_dict_object = None
+      self.edge_dict_base = None
 
       # Points of the point cloud transformed and expressed in the local object reference frame:
       self.transformed_points_object_frame = None
@@ -203,6 +208,25 @@ class point_cloud(object):
       # Each element is 7x1 quaternion.
       self.computed_end_effector_quaternion_base = None
       self.computed_end_effector_quaternion_inter_base = None
+
+      # Additional attributes to get just two axes corresponding to end-effector pose:
+      # NOTE: These attributes store only the Z and Y axis corresponding to the pre-grasp and
+      # grasp pose. The actual pose of the end-effector is then computed using the IK and collision checks
+      # Computed location of the end-effector pose is also stored.
+      self.computed_end_effector_locations = None
+      self.computed_end_effector_locations_inter = None
+
+      self.computed_end_effector_locations_base = None
+      self.computed_end_effector_locations_inter_base = None
+
+      self.gripper_axes = None
+      self.gripper_axes_inter = None
+
+      self.computed_end_effector_z_axis = None
+      self.computed_end_effector_z_axis_inter = None
+
+      self.computed_end_effector_axes_base = None
+      self.computed_end_effector_axes_inter_base = None
 
       # Coordinates of the bounding box which form the planes(faces of the object bounding box) corresponding to the approach directions:
       self.plane_points_1 = None
@@ -661,6 +685,12 @@ class point_cloud(object):
        self.R_base = np.identity(3)
        self.p_base = np.zeros([3,1])
 
+       # Pose of the bounding box:
+       self.g_base = np.zeros([4,4])
+       self.g_base[0:3, 0:3] = self.R_base
+       self.g_base[0:3, 3] = np.reshape(self.p_base, [3])
+       self.g_base[3,3] = 1
+
        # Getting the pose of the bounding box:
        self.get_pose_bounding_box()
 
@@ -676,6 +706,17 @@ class point_cloud(object):
 
        # Transforming the points to the object reference frame:
        self.transform_to_object_frame()
+
+       # Defining a dictionary containing the x, y and z dimensions along with the corresponding edges at the bottom face.
+       # NOTE: This is especially useful while selecting the pivoting axis and it is based on the same convention which we use to assign the reference frame
+       # 0 - x_dim, 1 - y_dim, 2 - z_dim
+       self.edge_dict_object = {0:[self.transformed_vertices_object_frame[0,:],self.transformed_vertices_object_frame[1,:], self.transformed_vertices_object_frame[2,:], self.transformed_vertices_object_frame[7,:]], 
+                 1:[self.transformed_vertices_object_frame[0,:],self.transformed_vertices_object_frame[2,:], self.transformed_vertices_object_frame[1,:], self.transformed_vertices_object_frame[7,:]]
+                }
+      
+       self.edge_dict_base = {0:[self.oriented_bounding_box_vertices[0,:],self.oriented_bounding_box_vertices[1,:], self.oriented_bounding_box_vertices[2,:], self.oriented_bounding_box_vertices[7,:]], 
+                 1:[self.oriented_bounding_box_vertices[0,:],self.oriented_bounding_box_vertices[2,:], self.oriented_bounding_box_vertices[1,:], self.oriented_bounding_box_vertices[7,:]]
+                }
 
        # Saving the point cloud transformed to the object reference frame:
        # Creating a Open3d PointCloud Object for the cloud corresponding to just the bounding box
@@ -1005,7 +1046,7 @@ class point_cloud(object):
       vect_2 = np.subtract(self.transformed_vertices_object_frame[7, :], self.transformed_vertices_object_frame[1, :])
 
       # Computing the center point on the plane just for visualization: 
-      center_point_plane = [self.transformed_vertices_object_frame[1, 0], self.p_base[1], self.p_base[2]]
+      center_point_plane = np.asarray([[self.transformed_vertices_object_frame[1, 0]], self.p_base[1], self.p_base[2]])
 
       # Normal vector corresponding to the plane:
       n = np.cross(vect_1, vect_2)
@@ -1013,7 +1054,7 @@ class point_cloud(object):
 
       # Translating each of the points by a specified distance: 
       # Computing the D in the equation of the plane Ax + By + Cz + D = 0:
-      D = np.dot(center_point_plane, unit_n)
+      D = np.dot(np.squeeze(center_point_plane), unit_n)
 
       # Initializing an empty array to store the projected points: 
       self.projected_points = np.zeros([self.transformed_points_object_frame.shape[0], self.transformed_points_object_frame.shape[1]])
@@ -1034,7 +1075,7 @@ class point_cloud(object):
       vect_2 = np.subtract(self.transformed_vertices_object_frame[1, :], self.transformed_vertices_object_frame[6, :])
 
       # Computing the center point on the plane just for visualization: 
-      center_point_plane = [self.p_base[1], self.transformed_vertices_object_frame[1, 1], self.p_base[2]]
+      center_point_plane = np.asarray([self.p_base[1], [self.transformed_vertices_object_frame[1, 1]], self.p_base[2]])
 
       # Normal vector corresponding to the plane:
       n = np.cross(vect_1, vect_2)
@@ -1042,7 +1083,7 @@ class point_cloud(object):
 
       # Translating each of the points by a specified distance: 
       # Computing the D in the equation of the plane Ax + By + Cz + D = 0:
-      D = np.dot(center_point_plane, unit_n)
+      D = np.dot(np.squeeze(center_point_plane), unit_n)
 
       # Initializing an empty array to store the projected points: 
       self.projected_points = np.zeros([self.transformed_points_object_frame.shape[0], self.transformed_points_object_frame.shape[1]])
@@ -1282,6 +1323,7 @@ class point_cloud(object):
       self.grid_centers_unique_dict = {}
 
       # Arrays to store the q_y and q_z values so that they can be studied and understood properly:
+      self.q_x_array = np.zeros([self.projected_points.shape[0], 1])
       self.q_y_array = np.zeros([self.projected_points.shape[0], 1])
       self.q_z_array = np.zeros([self.projected_points.shape[0], 1])
 
@@ -1358,6 +1400,7 @@ class point_cloud(object):
 
       # Arrays to store the q_y and q_z values so that they can be studied and understood properly:
       self.q_x_array = np.zeros([self.projected_points.shape[0], 1])
+      self.q_y_array = np.zeros([self.projected_points.shape[0], 1])
       self.q_z_array = np.zeros([self.projected_points.shape[0], 1])
 
       # 2D Occupancy Check using projected 
@@ -1409,7 +1452,7 @@ class point_cloud(object):
 
       # Translating each of the points by a specified distance: 
       # Computing the D in the equation of the plane Ax + By + Cz + D = 0:
-      D = np.dot(center_point, unit_u)
+      D = np.dot(np.squeeze(center_point), unit_u)
 
       distance = np.divide(la.norm(unit_u[0]*grasp_center[0] + unit_u[1]*grasp_center[1] + unit_u[2]*grasp_center[2] - D), np.sqrt(unit_u[0]**2 + unit_u[1]**2 + unit_u[2]**2))
       return distance, unit_u
@@ -1504,9 +1547,9 @@ class point_cloud(object):
             self.plane_points_3 = np.asarray([self.transformed_vertices_object_frame[6], self.transformed_vertices_object_frame[1], self.transformed_vertices_object_frame[7], self.transformed_vertices_object_frame[4]])
             
             # Center points of each of the planes corresponding to the three approach directions:
-            self.center_point_plane_1 = np.asarray([self.p_base[0], self.p_base[1], self.plane_points_1[0, 2]])
-            self.center_point_plane_2 = np.asarray([self.plane_points_2[0, 0], self.p_base[1], self.p_base[2]])
-            self.center_point_plane_3 = np.asarray([self.plane_points_3[0, 0], self.p_base[1], self.p_base[2]])
+            self.center_point_plane_1 = np.asarray([self.p_base[0], self.p_base[1], [self.plane_points_1[0, 2]]])
+            self.center_point_plane_2 = np.asarray([[self.plane_points_2[0, 0]], self.p_base[1], self.p_base[2]])
+            self.center_point_plane_3 = np.asarray([[self.plane_points_3[0, 0]], self.p_base[1], self.p_base[2]])
 
             # Orientation of the contact reference frames: 
             # Getting an orthogonal reference frame where the z axis is along the normal: 
@@ -1566,8 +1609,8 @@ class point_cloud(object):
                self.R_EE_inter = self.R_EE
 
                # End Effector Position: 
-               self.p_EE = np.add(self.grasp_center, np.dot(-1*(self.g_delta + self.gripper_height_tolerance), self.unit_u1))
-               self.p_EE_inter = np.add(self.grasp_center, np.dot(-1*(self.g_delta_inter + self.gripper_height_tolerance), self.unit_u1))    
+               self.p_EE = np.add(self.grasp_center, np.dot(-0.1434, self.unit_u1))
+               self.p_EE_inter = np.add(self.grasp_center, np.dot(-0.1800, self.unit_u1))    
 
                # End Effector pose as an element of SE(3) (4x4 transformation matrix):
                self.gripper_pose = np.zeros([4,4])
@@ -1632,8 +1675,8 @@ class point_cloud(object):
                self.R_EE_inter = self.R_EE
 
                # End Effector Position: 
-               self.p_EE = np.add(self.grasp_center, np.dot(-1*(self.g_delta + self.gripper_height_tolerance), self.unit_u2))
-               self.p_EE_inter = np.add(self.grasp_center, np.dot(-1*(self.g_delta_inter + self.gripper_height_tolerance), self.unit_u2)) 
+               self.p_EE = np.add(self.grasp_center, np.dot(-0.1434, self.unit_u2))
+               self.p_EE_inter = np.add(self.grasp_center, np.dot(-0.1800, self.unit_u2)) 
 
                # End Effector pose as an element of SE(3) (4x4 transformation matrix):
                self.gripper_pose = np.zeros([4,4])
@@ -1697,8 +1740,8 @@ class point_cloud(object):
                self.R_EE_inter = self.R_EE
 
                # End Effector Position: 
-               self.p_EE = np.add(self.grasp_center, np.dot(-1*(self.g_delta + self.gripper_height_tolerance), self.unit_u3))
-               self.p_EE_inter = np.add(self.grasp_center, np.dot(-1*(self.g_delta_inter + self.gripper_height_tolerance), self.unit_u3)) 
+               self.p_EE = np.add(self.grasp_center, np.dot(-0.1434, self.unit_u3))
+               self.p_EE_inter = np.add(self.grasp_center, np.dot(-0.1800, self.unit_u3)) 
 
                # End Effector pose as an element of SE(3) (4x4 transformation matrix):
                self.gripper_pose = np.zeros([4,4])
@@ -1746,9 +1789,9 @@ class point_cloud(object):
             # Approach Direction 4:
             self.plane_points_3 = np.asarray([self.transformed_vertices_object_frame[4], self.transformed_vertices_object_frame[7], self.transformed_vertices_object_frame[2], self.transformed_vertices_object_frame[5]])
 
-            self.center_point_plane_1 = np.asarray([self.p_base[0], self.p_base[1], self.plane_points_1[0, 2]])
-            self.center_point_plane_2 = np.asarray([self.p_base[0], self.plane_points_2[0, 1], self.p_base[2]])
-            self.center_point_plane_3 = np.asarray([self.p_base[0], self.plane_points_3[0, 1], self.p_base[2]]) 
+            self.center_point_plane_1 = np.asarray([self.p_base[0], self.p_base[1], [self.plane_points_1[0, 2]]])
+            self.center_point_plane_2 = np.asarray([self.p_base[0], [self.plane_points_2[0, 1]], self.p_base[2]])
+            self.center_point_plane_3 = np.asarray([self.p_base[0], [self.plane_points_3[0, 1]], self.p_base[2]]) 
 
             # Orientation of the contact reference frames: 
             # Getting an orthogonal reference frame where the z axis is along the normal: 
@@ -1808,8 +1851,8 @@ class point_cloud(object):
                self.R_EE_inter = self.R_EE
 
                # End Effector Position: 
-               self.p_EE = np.add(self.grasp_center, np.dot(-1*(self.g_delta + self.gripper_height_tolerance), self.unit_u1)) 
-               self.p_EE_inter = np.add(self.grasp_center, np.dot(-1*(self.g_delta_inter + self.gripper_height_tolerance), self.unit_u1))  
+               self.p_EE = np.add(self.grasp_center, np.dot(-0.1434, self.unit_u1)) 
+               self.p_EE_inter = np.add(self.grasp_center, np.dot(-0.1800, self.unit_u1))  
 
                # End Effector pose as an element of SE(3) (4x4 transformation matrix):
                self.gripper_pose = np.zeros([4,4])
@@ -1873,8 +1916,8 @@ class point_cloud(object):
                self.R_EE_inter = self.R_EE
 
                # End Effector Position: 
-               self.p_EE = np.add(self.grasp_center, np.dot(-1*(self.g_delta + self.gripper_height_tolerance), self.unit_u2))
-               self.p_EE_inter = np.add(self.grasp_center, np.dot(-1*(self.g_delta_inter + self.gripper_height_tolerance), self.unit_u2)) 
+               self.p_EE = np.add(self.grasp_center, np.dot(-0.1434, self.unit_u2))
+               self.p_EE_inter = np.add(self.grasp_center, np.dot(-0.1800, self.unit_u2)) 
 
                # End Effector pose as an element of SE(3) (4x4 transformation matrix):
                self.gripper_pose = np.zeros([4,4])
@@ -1938,8 +1981,8 @@ class point_cloud(object):
                self.R_EE_inter = self.R_EE
 
                # End Effector Position: 
-               self.p_EE = np.add(self.grasp_center, np.dot(-1*(self.g_delta + self.gripper_height_tolerance), self.unit_u3))
-               self.p_EE_inter = np.add(self.grasp_center, np.dot(-1*(self.g_delta_inter + self.gripper_height_tolerance), self.unit_u3)) 
+               self.p_EE = np.add(self.grasp_center, np.dot(-0.1434, self.unit_u3))
+               self.p_EE_inter = np.add(self.grasp_center, np.dot(-0.1800, self.unit_u3)) 
 
                # End Effector pose as an element of SE(3) (4x4 transformation matrix):
                self.gripper_pose = np.zeros([4,4])
@@ -2056,7 +2099,6 @@ class point_cloud(object):
          self.gripper_pose_inter_base[0:3, 3] = np.reshape(self.p_EE_inter_base, [3])
          self.gripper_pose_inter_base[3,3] = 1
          self.approach_dir_other_inter_poses_base.append(self.gripper_pose_inter_base)
-      
 
    ''' Function for plotting a CUBE:'''
    def plot_cube(self):
@@ -2083,6 +2125,12 @@ class point_cloud(object):
    def plot_reference_frames(self, ax):
       ax.quiver(self.p[0], self.p[1], self.p[2], self.scale_value*self.R[0, 0], self.scale_value*self.R[1, 0], self.scale_value*self.R[2, 0], color = "r", arrow_length_ratio = self.length_value)
       ax.quiver(self.p[0], self.p[1], self.p[2], self.scale_value*self.R[0, 1], self.scale_value*self.R[1, 1], self.scale_value*self.R[2, 1], color = "g", arrow_length_ratio = self.length_value)
-      ax.quiver(self.p[0], self.p[1], self.p[2], self.scale_value*self.R[0, 2], self.scale_value*self.R[1, 2], self.scale_value*self.R[2, 2], color = "b", arrow_length_ratio = self.length_value )
-      
+      ax.quiver(self.p[0], self.p[1], self.p[2], self.scale_value*self.R[0, 2], self.scale_value*self.R[1, 2], self.scale_value*self.R[2, 2], color = "b", arrow_length_ratio = self.length_value)
+      return ax
+   
+   '''Function to plot just 2 axes and the location:'''
+   #NOTE: The two axes being ploted are the Y and Z axis corresponding to the end-effector reference frame:
+   def plot_two_axes(self, ax):
+      ax.quiver(self.p[0], self.p[1], self.p[2], self.scale_value*self.R[0, 0], self.scale_value*self.R[0, 1], self.scale_value*self.R[0, 2], color = "b", arrow_length_ratio = self.length_value)
+      ax.quiver(self.p[0], self.p[1], self.p[2], self.scale_value*self.R[1, 0], self.scale_value*self.R[1, 1], self.scale_value*self.R[1, 2], color = "g", arrow_length_ratio = self.length_value)
       return ax

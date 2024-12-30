@@ -213,7 +213,6 @@ def visualize(cloud_object, num_pose, desired_grasp_pose_base_frame_final):
 
 # MAIN FUNCTION: 
 if __name__ == "__main__":
-    np.warnings.filterwarnings('ignore', category=np.VisibleDeprecationWarning)
 
     # Create an ArgumentParser Object
     parser = argparse.ArgumentParser(description='Task-Oriented Grasp Synthesis')
