@@ -73,7 +73,7 @@ def pivoting_motion(cloud_object, num_pose):
     # Computing the final end-effector pose after grasping based on the screw axis:
     pitch = 0
     theta = math.radians(90)
-    g = get_transformation_for_screw(cloud_object.screw_axis, pitch, theta, cloud_object.point)
+    g = get_transformation_for_screw(cloud_object.unit_vector, pitch, theta, cloud_object.point)
     
     # desired_grasp_pose_object_frame = cloud_object.computed_end_effector_poses[num_pose]
     # desired_grasp_pose_object_frame = cloud_object.approach_dir_2_poses[num_pose]
@@ -118,7 +118,7 @@ def visualize(cloud_object, num_pose, desired_grasp_pose_base_frame_final):
 
     # Visualize the screw axis: 
     ax1.scatter(cloud_object.point[0], cloud_object.point[1], cloud_object.point[2], marker = '*', s = 100, color = 'r')
-    ax1.quiver(cloud_object.point[0], cloud_object.point[1], cloud_object.point[2], 0.25*cloud_object.screw_axis[0], 0.25*cloud_object.screw_axis[1], 0.25*cloud_object.screw_axis[2], color = "r", arrow_length_ratio = 0.25)
+    ax1.quiver(cloud_object.point[0], cloud_object.point[1], cloud_object.point[2], 0.25*cloud_object.unit_vector[0], 0.25*cloud_object.unit_vector[1], 0.25*cloud_object.unit_vector[2], color = "r", arrow_length_ratio = 0.25)
 
     # Base reference Frame: 
     cloud_object.R = cloud_object.R_base
@@ -140,7 +140,7 @@ def visualize(cloud_object, num_pose, desired_grasp_pose_base_frame_final):
     ax2 = fig2.add_subplot(projection='3d')
     ax2.scatter(x_transformed_points, y_transformed_points, z_transformed_points, s = 0.2)
     ax2.scatter(cloud_object.point[0], cloud_object.point[1], cloud_object.point[2], marker = '*', s = 100, color = 'r')
-    ax2.quiver(cloud_object.point[0], cloud_object.point[1], cloud_object.point[2], 0.25*cloud_object.screw_axis[0], 0.25*cloud_object.screw_axis[1], 0.25*cloud_object.screw_axis[2], color = "r", arrow_length_ratio = 0.25)
+    ax2.quiver(cloud_object.point[0], cloud_object.point[1], cloud_object.point[2], 0.25*cloud_object.unit_vector[0], 0.25*cloud_object.unit_vector[1], 0.25*cloud_object.unit_vector[2], color = "r", arrow_length_ratio = 0.25)
     
     # Base reference Frame: 
     cloud_object.R = cloud_object.R_base
@@ -167,6 +167,10 @@ def visualize(cloud_object, num_pose, desired_grasp_pose_base_frame_final):
     ax3 = fig3.add_subplot(projection='3d')
     ax3.grid(False)
     ax3.scatter(x_points, y_points, z_points, s = 0.2)
+    
+    # Visualize the screw axis: 
+    ax3.scatter(cloud_object.point_base[0], cloud_object.point_base[1], cloud_object.point_base[2], marker = '*', s = 100, color = 'r')
+    ax3.quiver(cloud_object.point_base[0], cloud_object.point_base[1], cloud_object.point_base[2], 0.25*cloud_object.unit_vector_base[0], 0.25*cloud_object.unit_vector_base[1], 0.25*cloud_object.unit_vector_base[2], color = "r", arrow_length_ratio = 0.25)
 
     # Base reference Frame:
     cloud_object.R = cloud_object.R_base
@@ -251,9 +255,10 @@ if __name__ == "__main__":
     # TASK: Pivoting a Cuboidal box:
     # Screw Parameters:
     # Axis 1:
-    cloud_object.screw_axis = np.asarray([0, 1, 0])
-    cloud_object.point = np.asarray([cloud_object.transformed_vertices_object_frame[1,0], np.divide((cloud_object.transformed_vertices_object_frame[1,1] + cloud_object.transformed_vertices_object_frame[7,1]),2), cloud_object.transformed_vertices_object_frame[1,2]])
-    cloud_object.moment = np.cross(cloud_object.point, cloud_object.screw_axis)
+    u = np.asarray([0, 1, 0, 0])
+    p = np.asarray([cloud_object.transformed_vertices_object_frame[1,0], np.divide((cloud_object.transformed_vertices_object_frame[1,1] + cloud_object.transformed_vertices_object_frame[7,1]),2), cloud_object.transformed_vertices_object_frame[1,2], 1])
+    cloud_object.unit_vector_base = cloud_object.g_bounding_box @ u.T
+    cloud_object.point_base = cloud_object.g_bounding_box @ p.T
 
     cloud_object.generate_contacts()
     

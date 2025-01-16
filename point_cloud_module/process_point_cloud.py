@@ -88,10 +88,15 @@ class point_cloud(object):
       # Vertices of the bounding box expressed in the local object reference frame:
       self.transformed_vertices_object_frame = None
       
-      # Screw parameters:
-      self.screw_axis = None
+      # Screw axis in object's body reference frame:
+      self.unit_vector = None
       self.point = None
       self.moment = None
+
+      # Screw axis in the world/robot's base reference frame
+      self.unit_vector_base = None
+      self.point_base = None
+      self.moment_base = None
 
       # Attributes associated with sampling contact locations on the bounding box
       self.increment = None
@@ -743,7 +748,7 @@ class point_cloud(object):
       self.sampled_c1 = np.asarray([[self.transformed_vertices_object_frame[0,0], y, z] for z in self.z_axis_increments for y in self.y_axis_increments])
       self.sampled_c2 = np.asarray([[self.transformed_vertices_object_frame[1,0], y, z] for z in self.z_axis_increments for y in self.y_axis_increments])
       self.x_data = np.asarray([np.reshape(np.asarray([[self.transformed_vertices_object_frame[0,0], y, z], [self.transformed_vertices_object_frame[1,0], y, z], 
-                                                       self.screw_axis, self.moment]), [1,12]) for z in self.z_axis_increments for y in self.y_axis_increments])
+                                                       self.unit_vector, self.moment]), [1,12]) for z in self.z_axis_increments for y in self.y_axis_increments])
       self.x_data = np.reshape(self.x_data, [self.x_data.shape[0], self.x_data.shape[1]*self.x_data.shape[2]])
 
       # Generate empty data for the corresponding y labels required as input to the Pytorch DataLoader class
@@ -760,7 +765,7 @@ class point_cloud(object):
       # Efficiently sampling antipodal contacts:
       self.sampled_c1 = np.asarray([[self.transformed_vertices_object_frame[0,0], y, z] for z in self.z_axis_increments for y in self.y_axis_increments])
       self.sampled_c2 = np.asarray([[self.transformed_vertices_object_frame[1,0], y, z] for z in self.z_axis_increments for y in self.y_axis_increments])
-      self.x_data = np.asarray([np.reshape(np.asarray([[self.transformed_vertices_object_frame[0,0], y, z], [self.transformed_vertices_object_frame[1,0], y, z], self.screw_axis, self.moment, self.point]), [1,15]) for z in self.z_axis_increments for y in self.y_axis_increments])
+      self.x_data = np.asarray([np.reshape(np.asarray([[self.transformed_vertices_object_frame[0,0], y, z], [self.transformed_vertices_object_frame[1,0], y, z], self.unit_vector, self.moment, self.point]), [1,15]) for z in self.z_axis_increments for y in self.y_axis_increments])
       self.x_data = np.reshape(self.x_data, [self.x_data.shape[0], self.x_data.shape[1]*self.x_data.shape[2]])
 
       # Generate empty data for the corresponding y labels required as input to the Pytorch DataLoader class
@@ -782,7 +787,7 @@ class point_cloud(object):
       for i, c1 in enumerate(self.sampled_c1):
           self.x_data[i, :] = np.reshape(np.asarray([self.sampled_c1[i, 0], self.sampled_c1[i, 1], self.sampled_c1[i, 2], 
                               self.sampled_c2[i, 0], self.sampled_c2[i, 1], self.sampled_c2[i, 2], 
-                              self.screw_axis[0], self.screw_axis[1], self.screw_axis[2],
+                              self.unit_vector[0], self.unit_vector[1], self.unit_vector[2],
                               self.moment[0], self.moment[1], self.moment[2], 
                               self.point[0], self.point[1],  self.point[2],
                               la.norm(self.sampled_c1[i, :]), la.norm(self.point), la.norm((np.subtract(self.sampled_c1[i, :], self.point)))]), [1, 18])
@@ -801,7 +806,7 @@ class point_cloud(object):
       self.sampled_c1 = np.asarray([[x, self.transformed_vertices_object_frame[0,1], z] for z in self.z_axis_increments for x in self.x_axis_increments])
       self.sampled_c2 = np.asarray([[x, self.transformed_vertices_object_frame[2,1], z] for z in self.z_axis_increments for x in self.x_axis_increments])
       self.x_data = np.asarray([np.reshape(np.asarray([[x, self.transformed_vertices_object_frame[0,1], z], [x, self.transformed_vertices_object_frame[2,1], z], 
-                                                       self.screw_axis, self.moment]), [1,12]) for z in self.z_axis_increments for x in self.x_axis_increments])
+                                                       self.unit_vector, self.moment]), [1,12]) for z in self.z_axis_increments for x in self.x_axis_increments])
       self.x_data = np.reshape(self.x_data, [self.x_data.shape[0], self.x_data.shape[1]*self.x_data.shape[2]])
       
       # Generate empty data for the corresponding y labels required as input to the Pytorch DataLoader class
@@ -818,7 +823,7 @@ class point_cloud(object):
 
       self.sampled_c1 = np.asarray([[x, self.transformed_vertices_object_frame[0,1], z] for z in self.z_axis_increments for x in self.x_axis_increments])
       self.sampled_c2 = np.asarray([[x, self.transformed_vertices_object_frame[2,1], z] for z in self.z_axis_increments for x in self.x_axis_increments])
-      self.x_data = np.asarray([np.reshape(np.asarray([[x, self.transformed_vertices_object_frame[0,1], z], [x, self.transformed_vertices_object_frame[2,1], z], self.screw_axis, self.moment, self.point]), [1,15]) for z in self.z_axis_increments for x in self.x_axis_increments])
+      self.x_data = np.asarray([np.reshape(np.asarray([[x, self.transformed_vertices_object_frame[0,1], z], [x, self.transformed_vertices_object_frame[2,1], z], self.unit_vector, self.moment, self.point]), [1,15]) for z in self.z_axis_increments for x in self.x_axis_increments])
       self.x_data = np.reshape(self.x_data, [self.x_data.shape[0], self.x_data.shape[1]*self.x_data.shape[2]])
 
       # Generate empty data for the corresponding y labels required as input to the Pytorch DataLoader class
@@ -839,7 +844,7 @@ class point_cloud(object):
       for i, c1 in enumerate(self.sampled_c1):
           self.x_data[i, :] = np.reshape(np.asarray([self.sampled_c1[i, 0], self.sampled_c1[i, 1], self.sampled_c1[i, 2], 
                               self.sampled_c2[i, 0], self.sampled_c2[i, 1], self.sampled_c2[i, 2], 
-                              self.screw_axis[0], self.screw_axis[1], self.screw_axis[2],
+                              self.unit_vector[0], self.unit_vector[1], self.unit_vector[2],
                               self.moment[0], self.moment[1], self.moment[2], 
                               self.point[0], self.point[1],  self.point[2],
                               la.norm(self.sampled_c1[i, :]), la.norm(self.point), la.norm((np.subtract(self.sampled_c1[i, :], self.point)))]), [1, 18])
@@ -849,6 +854,14 @@ class point_cloud(object):
 
    '''Function to generate contacts depending on the gripper width and dimensions of the bounding box: '''
    def generate_contacts(self):
+      #  Transforming the screw axis from the world/base reference frame to the object's body reference frame:
+       unit_vector_var = la.inv(self.g_bounding_box) @ self.unit_vector_base.T
+       point_var = la.inv(self.g_bounding_box) @ self.point_base.T
+
+       self.unit_vector = unit_vector_var[0:3]
+       self.point = point_var[0:3]
+       self.moment = np.cross(self.point, self.unit_vector)
+
        # Define the increment:
        self.increment = 0.01
        if self.y_dim < self.gripper_width_tolerance:
