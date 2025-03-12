@@ -2,12 +2,10 @@ name: minimal_env
 channels:
   - defaults
   - conda-forge
+  - open3d-admin
 dependencies:
-  - python>=3.8
-  - numpy
-  - matplotlib
-  - scipy
-  - torch
+  - python=3.9
+  - open3d
   - pip:
       - addict
       - attrs
