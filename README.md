@@ -32,7 +32,7 @@ git clone git@github.com:irsl-sbu/Task-Oriented-Grasping-from-Point-Cloud-Repres
 
 ```
 cd Task-Oriented-Grasping-from-Point-Cloud-Representation
-conda env create -f tograsp.yml
+conda env create -f environment.yml
 ```
 
 The repository currently contains point clouds (PLY format) captured from multiple camera views using Intel Realsense D415 for a CheezIt box, Domino Sugar box and a Ritz cracker box in the folder ``` partial_point_cloud ```. 
