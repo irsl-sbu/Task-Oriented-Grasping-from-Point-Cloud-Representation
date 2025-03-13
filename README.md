@@ -44,7 +44,7 @@ Current implementation is for computing an ideal grasping region on point clouds
 1. Open a terminal and activate the conda environment
 
 ```
-conda activate tograsp
+conda activate minimal_env
 ```
 
 2. Type the following command to execute and visualize the results on a CheezIt box:
