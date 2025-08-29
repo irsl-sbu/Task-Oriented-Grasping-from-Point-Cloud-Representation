@@ -46,18 +46,18 @@ class point_cloud(object):
       self.oriented_bounding_box_center = None
       self.aligned_bounding_box_center = None
       
-      self.eps = None
-      self.min_points = None
+      self._eps = None
+      self._min_points = None
 
       # Attributes associated with Point Cloud Transformation 
-      self.bounding_box_flag = None
+      self._bounding_box_flag = None
 
-      self.R_object = None
-      self.p_object = None
+      self._R_object = None
+      self._p_object = None
 
-      self.R_base = None
-      self.p_base = None
-      self.g_base = None
+      self._R_base = None
+      self._p_base = None
+      self._g_base = None
 
       self.g_base_cam = None
       self.R_base_cam = None
@@ -68,9 +68,6 @@ class point_cloud(object):
 
       # Additional variable to store the pose of the bounding box as a 4x4 matrix:
       self.g_bounding_box = None
-
-      self.R_local = None
-      self.p_local = None
 
       # Dimensions of the bounding box:
       self.dimensions = None
@@ -131,7 +128,7 @@ class point_cloud(object):
       '''
       # Implementing DBSCAN Clustering to group local point cloud clusters together:
       with o3d.utility.VerbosityContextManager(o3d.utility.VerbosityLevel.Debug) as cm:
-         labels = np.array(self.cloud.cluster_dbscan(eps=self.eps, min_points=self.min_points, print_progress=True))
+         labels = np.array(self.cloud.cluster_dbscan(eps=self._eps, min_points=self._min_points, print_progress=True))
          
       # Visualizing the clusters (this part needs to be understood better)
       max_label = labels.max()
@@ -273,11 +270,11 @@ class point_cloud(object):
 
       # We need to transform the oriented_bounding_box_vertices back into the object base frame:
       for i, vertex in enumerate(self.oriented_bounding_box_vertices):
-        self.oriented_bounding_box_vertices[i,:] = np.reshape(np.dot(np.transpose(np.add(np.reshape(self.oriented_bounding_box_vertices[i, :], [3,1]), self.p_bounding_box)), la.inv(self.R_object)), [1,3])
+        self.oriented_bounding_box_vertices[i,:] = np.reshape(np.dot(np.transpose(np.add(np.reshape(self.oriented_bounding_box_vertices[i, :], [3,1]), self.p_bounding_box)), la.inv(self._R_object)), [1,3])
 
       # We need to compute the center of the oriented bounding and it cannot be the same as the
       # axis aligned bounding box. It should based upon the dimensions of the oriented bounding box.
-      self.oriented_bounding_box_center = np.reshape(np.dot(np.transpose(np.add(self.oriented_bounding_box_center, self.p_bounding_box)), la.inv(self.R_object)), [3])
+      self.oriented_bounding_box_center = np.reshape(np.dot(np.transpose(np.add(self.oriented_bounding_box_center, self.p_bounding_box)), la.inv(self._R_object)), [3])
 
    def _compute_obb_rotating_calipers(self):
       '''
@@ -376,11 +373,11 @@ class point_cloud(object):
 
       # We need to transform the oriented_bounding_box_vertices back into the object base frame:
       for i, vertex in enumerate(self.oriented_bounding_box_vertices):
-        self.oriented_bounding_box_vertices[i,:] = np.reshape(np.dot(np.transpose(np.add(np.reshape(self.oriented_bounding_box_vertices[i, :], [3,1]), self.p_bounding_box)), la.inv(self.R_object)), [1,3])
+        self.oriented_bounding_box_vertices[i,:] = np.reshape(np.dot(np.transpose(np.add(np.reshape(self.oriented_bounding_box_vertices[i, :], [3,1]), self.p_bounding_box)), la.inv(self._R_object)), [1,3])
 
       # We need to compute the center of the oriented bounding and it cannot be the same as the
       # axis aligned bounding box. It should based upon the dimensions of the oriented bounding box.
-      self.oriented_bounding_box_center = np.reshape(np.dot(np.transpose(np.add(self.oriented_bounding_box_center, self.p_bounding_box)), la.inv(self.R_object)), [3])
+      self.oriented_bounding_box_center = np.reshape(np.dot(np.transpose(np.add(self.oriented_bounding_box_center, self.p_bounding_box)), la.inv(self._R_object)), [3])
 
    def _get_pose_bounding_box(self):
       ''' 
@@ -426,7 +423,7 @@ class point_cloud(object):
       '''
       # Transforming all the points such that they are expressed in the object reference frame:
       self.points = np.asarray(self.processed_cloud.points)
-      self.R_object = np.matmul(self.R_base, self.R_bounding_box)
+      self._R_object = np.matmul(self._R_base, self.R_bounding_box)
       self.transformed_points_object_frame = np.zeros([self.points.shape[0], self.points.shape[1]])
 
       if self.bounding_box_flag == 0:
@@ -437,13 +434,13 @@ class point_cloud(object):
          print('Please update the bounding box flag')
 
       for i, point in enumerate(self.points):
-         self.transformed_points_object_frame[i,:] = np.reshape(np.dot(np.transpose(np.subtract(np.reshape(point, [3,1]), self.p_bounding_box)), self.R_object), [1,3])
+         self.transformed_points_object_frame[i,:] = np.reshape(np.dot(np.transpose(np.subtract(np.reshape(point, [3,1]), self.p_bounding_box)), self._R_object), [1,3])
 
       # Transforming the vertices of the bounding box also to the object reference frame:
       self.transformed_vertices_object_frame = np.zeros([vertices.shape[0], vertices.shape[1]])
 
       for i, vertex in enumerate(vertices):
-         self.transformed_vertices_object_frame[i,:] = np.reshape(np.dot(np.transpose(np.subtract(np.reshape(vertex, [3,1]), self.p_bounding_box)), self.R_object), [1,3])
+         self.transformed_vertices_object_frame[i,:] = np.reshape(np.dot(np.transpose(np.subtract(np.reshape(vertex, [3,1]), self.p_bounding_box)), self._R_object), [1,3])
 
       # Getting the dimensions of the box in terms of the X, Y and Z directions:
       self.x_dim = np.round(np.absolute(self.transformed_vertices_object_frame[0,0] - self.transformed_vertices_object_frame[1,0]),2)
@@ -469,13 +466,13 @@ class point_cloud(object):
       self._compute_aabb()
       
       # Rotation matrix and position vector for the robot base or world reference frame: 
-      self.R_base = np.identity(3)
-      self.p_base = np.zeros([3,1])
+      self._R_base = np.identity(3)
+      self._p_base = np.zeros([3,1])
 
       # Pose of the bounding box:
       self.g_base = np.zeros([4,4])
-      self.g_base[0:3, 0:3] = self.R_base
-      self.g_base[0:3, 3] = np.reshape(self.p_base, [3])
+      self.g_base[0:3, 0:3] = self._R_base
+      self.g_base[0:3, 3] = np.reshape(self._p_base, [3])
       self.g_base[3,3] = 1
 
       # Getting the pose of the bounding box:

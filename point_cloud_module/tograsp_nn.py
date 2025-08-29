@@ -273,9 +273,11 @@ class tograsp():
         self.approach_dir_other_poses_base = None
         self.approach_dir_other_inter_poses_base = None
 
-    '''Function to sample contacts from the two parallel faces of the bounding box and generate the feature vector to be used as input to the
-      neural network. In this function a single datapoint has dimensions 12x1 and contains plucker coordinates.'''
-    def generate_contacts_yz(self):
+    def _generate_contacts_yz(self):
+      '''
+         Function to sample contacts from the two parallel faces of the bounding box and generate the feature vector to be used as input to the
+         neural network. In this function a single datapoint has dimensions 12x1 and contains plucker coordinates.
+      '''
       # Sampling contacts as input to the neural network. We will be using the transformed points and transformed 
       # vertices for sampling the antipodal contact locations. 
       self.y_axis_increments = np.arange(self.cloud_object.transformed_vertices_object_frame[1,1], self.cloud_object.transformed_vertices_object_frame[7,1], self.increment)
@@ -291,9 +293,11 @@ class tograsp():
       # Generate empty data for the corresponding y labels required as input to the Pytorch DataLoader class
       self.y_data = np.zeros([len(self.y_axis_increments)*len(self.z_axis_increments), 1])
 
-    '''Function to sample contacts from the two parallel faces of the bounding box and generate the feature vector to be used as input to the
-      neural network. In this function a single datapoint has dimensions 15x1 and contains plucker as well as nonplucker coordinates.'''
-    def generate_contacts_yz_plucker_non_plucker(self):
+    def _generate_contacts_yz_plucker_non_plucker(self):
+      '''
+         Function to sample contacts from the two parallel faces of the bounding box and generate the feature vector to be used as input to the
+         neural network. In this function a single datapoint has dimensions 15x1 and contains plucker as well as nonplucker coordinates.
+      '''
       # Sampling contacts as input to the neural network. We will be using the transformed points and transformed 
       # vertices for sampling the antipodal contact locations. 
       self.y_axis_increments = np.arange(self.cloud_object.transformed_vertices_object_frame[1,1], self.cloud_object.transformed_vertices_object_frame[7,1], self.increment)
@@ -308,9 +312,11 @@ class tograsp():
       # Generate empty data for the corresponding y labels required as input to the Pytorch DataLoader class
       self.y_data = np.zeros([len(self.y_axis_increments)*len(self.z_axis_increments), 1])
 
-    '''Function to sample contacts from the two parallel faces of the bounding box and generate the feature vector to be used as input to the
-      neural network. In this function a single datapoint has dimensions 18x1 and contains additional features like the moment arms.'''
-    def generate_contacts_yz_additional_features(self):
+    def _generate_contacts_yz_additional_features(self):
+      '''
+         Function to sample contacts from the two parallel faces of the bounding box and generate the feature vector to be used as input to the
+         neural network. In this function a single datapoint has dimensions 18x1 and contains additional features like the moment arms.
+      '''
       # Sampling contacts as input to the neural network. We will be using the transformed points and transformed 
       # vertices for sampling the antipodal contact locations. 
       self.y_axis_increments = np.arange(self.cloud_object.transformed_vertices_object_frame[1,1], self.cloud_object.transformed_vertices_object_frame[7,1], self.increment)
@@ -332,9 +338,11 @@ class tograsp():
       # Generate empty data for the corresponding y labels required as input to the Pytorch DataLoader class
       self.y_data = np.zeros([len(self.y_axis_increments)*len(self.z_axis_increments), 1])
 
-    '''Function to sample contacts from the two parallel faces of the bounding box and generate the feature vector to be used as input to the
-      neural network. In this function a single datapoint has dimensions 12x1 and contains plucker coordinates.'''
-    def generate_contacts_xz(self):
+    def _generate_contacts_xz(self):
+      '''
+         Function to sample contacts from the two parallel faces of the bounding box and generate the feature vector to be used as input to the
+         neural network. In this function a single datapoint has dimensions 12x1 and contains plucker coordinates.
+      '''
       # Sampling contacts as input to the neural network. We will be using the transformed points and transformed 
       # vertices for sampling the antipodal contact locations. 
       self.x_axis_increments = np.arange(self.cloud_object.transformed_vertices_object_frame[0,0], self.cloud_object.transformed_vertices_object_frame[1,0], self.increment)
@@ -349,10 +357,11 @@ class tograsp():
       # Generate empty data for the corresponding y labels required as input to the Pytorch DataLoader class
       self.y_data = np.zeros([len(self.x_axis_increments)*len(self.z_axis_increments), 1])
 
-
-    '''Function to sample contacts from the two parallel faces of the bounding box and generate the feature vector to be used as input to the
-      neural network. In this function a single datapoint has dimensions 15x1 and contains plucker as well as nonplucker coordinates.'''
-    def generate_contacts_xz_plucker_non_plucker(self):
+    def _generate_contacts_xz_plucker_non_plucker(self):
+      '''
+         Function to sample contacts from the two parallel faces of the bounding box and generate the feature vector to be used as input to the
+         neural network. In this function a single datapoint has dimensions 15x1 and contains plucker as well as nonplucker coordinates.
+      '''
       # Sampling contacts as input to the neural network. We will be using the transformed points and transformed 
       # vertices for sampling the antipodal contact locations. 
       self.x_axis_increments = np.arange(self.cloud_object.transformed_vertices_object_frame[0,0], self.cloud_object.transformed_vertices_object_frame[1,0], self.increment)
@@ -366,9 +375,11 @@ class tograsp():
       # Generate empty data for the corresponding y labels required as input to the Pytorch DataLoader class
       self.y_data = np.zeros([len(self.x_axis_increments)*len(self.z_axis_increments), 1])
 
-    '''Function to sample contacts from the two parallel faces of the bounding box and generate the feature vector to be used as input to the
-      neural network. In this function a single datapoint has dimensions 18x1 and contains additional features like the moment arms.'''
-    def generate_contacts_xz_additional_features(self):
+    def _generate_contacts_xz_additional_features(self):
+      '''
+         Function to sample contacts from the two parallel faces of the bounding box and generate the feature vector to be used as input to the
+         neural network. In this function a single datapoint has dimensions 18x1 and contains additional features like the moment arms.
+      '''
       # Sampling contacts as input to the neural network. We will be using the transformed points and transformed 
       # vertices for sampling the antipodal contact locations. 
       self.x_axis_increments = np.arange(self.cloud_object.transformed_vertices_object_frame[0,0], self.cloud_object.transformed_vertices_object_frame[1,0], self.increment)
@@ -389,35 +400,40 @@ class tograsp():
       # Generate empty data for the corresponding y labels required as input to the Pytorch DataLoader class
       self.y_data = np.zeros([len(self.x_axis_increments)*len(self.z_axis_increments), 1])
 
-    '''Function to generate contacts depending on the gripper width and dimensions of the bounding box: '''
     def generate_contacts(self):
+      '''
+         Function to generate contacts depending on the gripper width and dimensions of the bounding box.
+      '''
       #  Transforming the screw axis from the world/base reference frame to the object's body reference frame:
-       unit_vector_var = la.inv(self.cloud_object.g_bounding_box) @ self.unit_vector_base.T
-       point_var = la.inv(self.cloud_object.g_bounding_box) @ self.point_base.T
+      unit_vector_var = la.inv(self.cloud_object.g_bounding_box) @ self.unit_vector_base.T
+      point_var = la.inv(self.cloud_object.g_bounding_box) @ self.point_base.T
 
-       self.unit_vector = unit_vector_var[0:3]
-       self.point = point_var[0:3]
-       self.moment = np.cross(self.point, self.unit_vector)
+      self.unit_vector = unit_vector_var[0:3]
+      self.point = point_var[0:3]
+      self.moment = np.cross(self.point, self.unit_vector)
 
-       # Define the increment:
-       self.increment = 0.01
-       if self.cloud_object.y_dim < self.gripper_width_tolerance:
-           print('Generating contacts along XZ plane')
-           # self.generate_contacts_xz()
-           # self.generate_contacts_xz_plucker_non_plucker()
-           self.generate_contacts_xz_additional_features()
-       elif self.cloud_object.x_dim < self.gripper_width_tolerance:
-           print('Generating contacts along YZ plane')
-           # self.generate_contacts_yz()
-           # self.generate_contacts_yz_plucker_non_plucker()
-           self.generate_contacts_yz_additional_features()
-       elif self.cloud_object.x_dim < self.gripper_width_tolerance and self.cloud_object.y_dim < self.gripper_width_tolerance:
-           print('Both dimensions with gripper width tolerance. Generating contacts along XZ plane')
-       else:
-           print('Invalid Data')
+      # Define the increment:
+      self.increment = 0.01
+      if self.cloud_object.y_dim < self.gripper_width_tolerance:
+         print('Generating contacts along XZ plane')
+         # self._generate_contacts_xz()
+         # self._generate_contacts_xz_plucker_non_plucker()
+         self._generate_contacts_xz_additional_features()
+      elif self.cloud_object.x_dim < self.gripper_width_tolerance:
+         print('Generating contacts along YZ plane')
+         # self._generate_contacts_yz()
+         # self._generate_contacts_yz_plucker_non_plucker()
+         self._generate_contacts_yz_additional_features()
+      elif self.cloud_object.x_dim < self.gripper_width_tolerance and self.cloud_object.y_dim < self.gripper_width_tolerance:
+         print('Both dimensions with gripper width tolerance. Generating contacts along XZ plane')
+      else:
+         print('Invalid Data')
 
-    '''This function is used to predict the metric values using the datapoints as input'''
+    
     def predict_metric(self):
+      '''
+         This function is used to predict the metric values using the datapoints as input
+      '''
       # OLDER NEURAL NETWORK
       # NEURAL NETWORK BASED METRIC PREDICTION: 
       # HYPER PARAMETERS: 
@@ -485,8 +501,10 @@ class tograsp():
       # Normalizing the values between 0 and 1:
       self.predicted = (self.predicted - np.min(self.predicted))/(np.max(self.predicted - np.min(self.predicted)))
 
-    '''This function is used to predict the metric values using the datapoints as input'''
     def predict_metric_generic(self):
+      '''
+         This function is used to predict the metric values using the datapoints as input.
+      '''
       # NEWLY TRAINED NEURAL NETWORK
       # NEURAL NETWORK BASED METRIC PREDICTION: 
       # HYPER PARAMETERS: 
@@ -584,8 +602,10 @@ class tograsp():
       # Normalizing the values between 0 and 1:
       self.predicted = (self.predicted - np.min(self.predicted))/(np.max(self.predicted - np.min(self.predicted)))
 
-    '''# Function to project the points onto a one of the surfaces of the bounding box:'''
-    def project_points_yz(self):
+    def _project_points_yz(self):
+      '''
+         Function to project the points onto a one of the surfaces of the bounding box
+      '''
       # PROJECTING THE POINTS ON TO ONE OF THE PLANES: 
       # Computing the equation of the plane. For our case we will be considering two planes. But for the sake of implementation 
       # we are only considering one plane: 
@@ -613,8 +633,10 @@ class tograsp():
         distance = np.divide(la.norm(unit_n[0]*point[0] + unit_n[1]*point[1] + unit_n[2]*point[2] - D), np.sqrt(unit_n[0]**2 + unit_n[1]**2 + unit_n[2]**2))
         self.projected_points[i, :] = np.add(point, np.dot(distance, unit_n))
 
-    '''# Function to project the points onto a one of the surfaces of the bounding box:'''
-    def project_points_xz(self):
+    def _project_points_xz(self):
+      ''' 
+         Function to project the points onto a one of the surfaces of the bounding box
+      '''
       # PROJECTING THE POINTS ON TO ONE OF THE PLANES: 
       # Computing the equation of the plane. For our case we will be considering two planes. But for the sake of implementation 
       # we are only considering one plane: 
@@ -642,17 +664,19 @@ class tograsp():
         distance = np.divide(la.norm(unit_n[0]*point[0] + unit_n[1]*point[1] + unit_n[2]*point[2] - D), np.sqrt(unit_n[0]**2 + unit_n[1]**2 + unit_n[2]**2))
         self.projected_points[i, :] = np.add(point, np.dot(distance, unit_n))
    
-    ''' Function to generate a grid on the surface of the bounding box based on the computed metric values:''' 
-    def generate_grid_yz(self):
+    def _generate_grid_yz(self):
+      '''
+         Function to generate a grid on the surface of the bounding box based on the computed metric values
+      ''' 
       # GRID GENERATION: 
-      '''Now we generate the grid using the multidimensional arrays 'x_data' and 'metric_values'
-         Since we are sampling contact locations along the Y and Z axis of the object lcoal reference frame: '''
+      # NOTE: Now we generate the grid using the multidimensional arrays 'x_data' and 'metric_values'
+      # Since we are sampling contact locations along the Y and Z axis of the object lcoal reference frame
       self.y_counter = 0
       self.z_counter = 0
       counter = 0
       
       # Create a dictionary of test_datapoints and predicted metric values. 
-      '''This is being done to access the predicted metric values so that it can efficiently used for grid generation'''
+      # NOTE: This is being done to access the predicted metric values so that it can efficiently used for grid generation
       dictionary_test_data = {}
       for test_point, label in zip(self.test_datapoints, self.predicted):
           test_point = np.around(test_point, 3)
@@ -740,12 +764,14 @@ class tograsp():
                # Updating outer loop counter.
                self.z_counter += 1
 
-    ''' Function to generate a grid on the surface of the bounding box based on the computed metric values: ''' 
-    def generate_grid_xz(self):
+    def _generate_grid_xz(self):
+      '''
+         Function to generate a grid on the surface of the bounding box based on the computed metric values
+      ''' 
       # GRID GENERATION: 
-      '''Now we generate the grid using the multidimensional arrays 'x_data' and 'metric_values'
-         Since we are sampling contact locations along the Y and Z axis, we also need to do something similar to 
-         X and Z axis of the object lcoal reference frame: '''
+      # NOTE: Now we generate the grid using the multidimensional arrays 'x_data' and 'metric_values'
+      # Since we are sampling contact locations along the Y and Z axis, we also need to do something similar to 
+      # X and Z axis of the object lcoal reference frame:
       self.x_counter = 0
       self.z_counter = 0
       counter = 0
@@ -837,11 +863,13 @@ class tograsp():
                # Updating outer loop counter.
                self.z_counter += 1
 
-    ''' Function to check the occupancy of the the point corresponding to the point cloud within the generate grid:'''
-    def check_occupancy_yz(self):
+    def _check_occupancy_yz(self):
+      '''
+         Function to check the occupancy of the the point corresponding to the point cloud within the generate grid
+      '''
       # TRANSFORMING THE POINTS WITH RESPECT TO THE REFERENCE FRAME ATTACHED AT THE CORNER OF THE BOUNDING BOX:
-      ''' This will be different for sampling points along the XZ axes as compared to the YZ axes, but it will be same for different instances
-         of both. '''
+      # NOTE: This will be different for sampling points along the XZ axes as compared to the YZ axes, but it will be same for different instances
+      # of both.
 
       # Rotation matrix of the new local reference frame with respect to the object base reference frame:
       self.R_local = self.cloud_object.R_bounding_box
@@ -849,19 +877,17 @@ class tograsp():
       # Position vector of the new local reference frame with respec to the object base reference frame:
       self.p_local = self.cloud_object.transformed_vertices_object_frame[1,:]
 
-      '''Transforming the projected points from the object reference frame {O} to the local reference {L}: 
-         This computation is important and may not always be valid for all instances of sampling along XZ and YZ planes.
-         In this case we are essentially shifting the reference frame to the
-         corner'''
+      # NOTE: Transforming the projected points from the object reference frame {O} to the local reference {L}: 
+      # This computation is important and may not always be valid for all instances of sampling along XZ and YZ planes.
+      # In this case we are essentially shifting the reference frame to the corner
 
       self.projected_points_local_frame = np.asarray([np.subtract(p, self.p_local) for p in self.projected_points])
 
       # OCCUPANCY CHECK:
-      '''The main reason for transforming the points to a local reference frame in the corner of the bounding box is 
-         so that we can perform a 2D occupancy check over the generated grid. This will allow us to only have the grids 
-         and associated grid points which have points belonging to the point cloud within their 2D bounds.'''
+      # NOTE: The main reason for transforming the points to a local reference frame in the corner of the bounding box is 
+      # so that we can perform a 2D occupancy check over the generated grid. This will allow us to only have the grids 
+      # and associated grid points which have points belonging to the point cloud within their 2D bounds.
 
-      # IMPORTANT: The FOR loop will be slightly different for the XZ and YZ planes.
       print('Checking Occupancy ... ')
 
       self.X_grid_points_occupied = self.cloud_object.transformed_vertices_object_frame[1,0]*np.ones([self.projected_points.shape[0],self.X_grid_points.shape[1]])
@@ -915,10 +941,10 @@ class tograsp():
 
 
     ''' Function to check the occupancy of the the point corresponding to the point cloud within the generate grid:'''
-    def check_occupancy_xz(self):
+    def _check_occupancy_xz(self):
       # TRANSFORMING THE POINTS WITH RESPECT TO THE REFERENCE FRAME ATTACHED AT THE CORNER OF THE BOUNDING BOX:
-      ''' This will be different for sampling points along the XZ axes as compared to the YZ axes, but it will be same for different instances
-         of both. '''
+      # NOTE: This will be different for sampling points along the XZ axes as compared to the YZ axes, but it will be same for different instances
+      # of both.
 
       # Rotation matrix of the new local reference frame with respect to the object base reference frame:
       self.R_local = self.cloud_object.R_bounding_box
@@ -926,18 +952,17 @@ class tograsp():
       # Position vector of the new local reference frame with respec to the object base reference frame:
       self.p_local = self.cloud_object.transformed_vertices_object_frame[0,:]
 
-      '''Transforming the projected points from the object reference frame {O} to the local reference {L}: 
-         This computation is important and may not always be valid for all instances of sampling along XZ and YZ planes.
-         In this case we are essentially shifting the reference frame to the
-         corner:'''
+      # NOTE: Transforming the projected points from the object reference frame {O} to the local reference {L}: 
+      # This computation is important and may not always be valid for all instances of sampling along XZ and YZ planes.
+      # In this case we are essentially shifting the reference frame to the corner.
       
       self.projected_points_local_frame = np.asarray([np.subtract(p, self.p_local) for p in self.projected_points])
       # OCCUPANCY CHECK:
-      '''The main reason for transforming the points to a local reference frame in the corner of the bounding box is 
-         so that we can perform a 2D occupancy check over the generated grid. This will allow us to only have the grids 
-         and associated grid points which have points belonging to the point cloud within their 2D bounds.'''
+      # NOTE: The main reason for transforming the points to a local reference frame in the corner of the bounding box is 
+      # so that we can perform a 2D occupancy check over the generated grid. This will allow us to only have the grids 
+      # and associated grid points which have points belonging to the point cloud within their 2D bounds.'''
 
-      # IMPORTANT: The FOR loop will be slightly different for the XZ and YZ planes.
+      # NOTE: The FOR loop will be slightly different for the XZ and YZ planes.
       print('Checking Occupancy ... ')
 
       self.Y_grid_points_occupied = self.cloud_object.transformed_vertices_object_frame[1,1]*np.ones([self.projected_points.shape[0],self.Y_grid_points.shape[1]])
@@ -948,12 +973,12 @@ class tograsp():
       self.grid_centers_dict = {}
       self.grid_centers_unique_dict = {}
 
-      # Arrays to store the q_y and q_z values so that they can be studied and understood properly:
+      # Arrays to store the q_y and q_z values so that they can be studied and understood properly.
       self.q_x_array = np.zeros([self.projected_points.shape[0], 1])
       self.q_y_array = np.zeros([self.projected_points.shape[0], 1])
       self.q_z_array = np.zeros([self.projected_points.shape[0], 1])
 
-      # 2D Occupancy Check using projected 
+      # 2D Occupancy Check using projected.
       for i, point in enumerate(self.projected_points_local_frame):
          q_x = np.around(np.divide(point[0], self.increment))
          q_z = np.around(np.divide(point[2], self.increment))
@@ -990,8 +1015,10 @@ class tograsp():
       for i, grid_center in enumerate(self.grid_centers_unique):
          self.grid_centers_unique_dict[tuple([grid_center[0].item(), grid_center[1].item()])] = self.grid_centers_dict[tuple([grid_center[0].item(), grid_center[1].item()])]
 
-    '''Function to compute the distance from a point to a plane'''
-    def get_distance(self, plane_points, center_point, grasp_center):
+    def _get_distance(self, plane_points, center_point, grasp_center):
+      '''
+         Function to compute the distance from a point to a plane
+      '''
       # We need to compute the distance of the grasp center to the first plane only:
       vect_1 = np.subtract(plane_points[3, :], plane_points[0, :])
       vect_2 = np.subtract(plane_points[1, :], plane_points[0, :])
@@ -1007,49 +1034,52 @@ class tograsp():
       distance = np.divide(la.norm(unit_u[0]*grasp_center[0] + unit_u[1]*grasp_center[1] + unit_u[2]*grasp_center[2] - D), np.sqrt(unit_u[0]**2 + unit_u[1]**2 + unit_u[2]**2))
       return distance, unit_u
    
-    '''Function to extract and store the points corresponding to the ideal grasping region: '''
     def get_ideal_grasping_region(self):
-        
-        if self.cloud_object.y_dim < self.gripper_width_tolerance:
-            self.project_points_xz()
-            print('Points projected on the surface now generating grid ...')
-            self.generate_grid_xz()
-            self.check_occupancy_xz()
-            print('Occupancy check completed, proceed towards sampling poses ... ')
-        elif self.cloud_object.x_dim < self.gripper_width_tolerance:
-            self.project_points_yz()
-            print('Points projected on the surface now generating grid ...')
-            self.generate_grid_yz()
-            self.check_occupancy_yz()
-            print('Occupancy check completed, proceed towards sampling poses ... ')
-        elif self.cloud_object.x_dim < self.gripper_width_tolerance and self.cloud_object.y_dim < self.gripper_width_tolerance:
-            print('Both dimensions with gripper width tolerance. Generating contacts along XZ plane')
-            self.project_points_xz()
-            print('Points projected on the surface now generating grid ...')
-            self.generate_grid_xz()
-            self.check_occupancy_xz()
-            print('Occupancy check completed, proceed towards sampling poses ... ')
-        else:
-            print('Invalid Data')
+      '''
+         Function to extract and store the points corresponding to the ideal grasping region
+      '''
+      if self.cloud_object.y_dim < self.gripper_width_tolerance:
+         self._project_points_xz()
+         print('Points projected on the surface now generating grid ...')
+         self._generate_grid_xz()
+         self._check_occupancy_xz()
+         print('Occupancy check completed, proceed towards sampling poses ... ')
+      elif self.cloud_object.x_dim < self.gripper_width_tolerance:
+         self._project_points_yz()
+         print('Points projected on the surface now generating grid ...')
+         self._generate_grid_yz()
+         self._check_occupancy_yz()
+         print('Occupancy check completed, proceed towards sampling poses ... ')
+      elif self.cloud_object.x_dim < self.gripper_width_tolerance and self.cloud_object.y_dim < self.gripper_width_tolerance:
+         print('Both dimensions with gripper width tolerance. Generating contacts along XZ plane')
+         self._project_points_xz()
+         print('Points projected on the surface now generating grid ...')
+         self._generate_grid_xz()
+         self._check_occupancy_xz()
+         print('Occupancy check completed, proceed towards sampling poses ... ')
+      else:
+         print('Invalid Data')
 
-        self.grid_metric_values_occupied = self.grid_metric_values_occupied.flatten()
-        self.max_metric_value = max(self.grid_metric_values_occupied)
+      self.grid_metric_values_occupied = self.grid_metric_values_occupied.flatten()
+      self.max_metric_value = max(self.grid_metric_values_occupied)
 
-        # The metric threshold value is set to be 90% of the max metric value. All the points with a metric value higher than the threshold 
-        # value are part of the ideal grasping region. 
-        self.metric_threshold = self.grasp_metric_threshold*self.max_metric_value
-        # self.grasp_metric_threshold = 0.7*self.max_metric_value
-        # self.grasp_metric_threshold = self.max_metric_value
-      
-        self.ideal_grasping_region_metric_values = np.asarray([self.grid_metric_values_occupied[i] for i in range(0, self.grid_metric_values_occupied.shape[0]) if self.grid_metric_values_occupied[i] >= self.metric_threshold])
-        self.ideal_grasping_region_indices = [i for i in range(0, self.grid_metric_values_occupied.shape[0]) if self.grid_metric_values_occupied[i] >= self.metric_threshold]
-        self.ideal_grasping_region_grid_centers = [gc for gc in self.grid_centers_unique if self.grid_centers_unique_dict[tuple([gc[0].item(), gc[1].item(),])] >= self.metric_threshold]
-                
-        self.ideal_grasping_region_points = self.cloud_object.transformed_points_object_frame[self.ideal_grasping_region_indices, :]
-        self.ideal_grasping_region_normals = self.cloud_object.normals_object_frame[self.ideal_grasping_region_indices, :]
+      # The metric threshold value is set to be 90% of the max metric value. All the points with a metric value higher than the threshold 
+      # value are part of the ideal grasping region. 
+      self.metric_threshold = self.grasp_metric_threshold*self.max_metric_value
+      # self.grasp_metric_threshold = 0.7*self.max_metric_value
+      # self.grasp_metric_threshold = self.max_metric_value
+
+      self.ideal_grasping_region_metric_values = np.asarray([self.grid_metric_values_occupied[i] for i in range(0, self.grid_metric_values_occupied.shape[0]) if self.grid_metric_values_occupied[i] >= self.metric_threshold])
+      self.ideal_grasping_region_indices = [i for i in range(0, self.grid_metric_values_occupied.shape[0]) if self.grid_metric_values_occupied[i] >= self.metric_threshold]
+      self.ideal_grasping_region_grid_centers = [gc for gc in self.grid_centers_unique if self.grid_centers_unique_dict[tuple([gc[0].item(), gc[1].item(),])] >= self.metric_threshold]
+               
+      self.ideal_grasping_region_points = self.cloud_object.transformed_points_object_frame[self.ideal_grasping_region_indices, :]
+      self.ideal_grasping_region_normals = self.cloud_object.normals_object_frame[self.ideal_grasping_region_indices, :]
        
-    '''Function to compute the bounding box the points corresponding to the ideal grasping region: '''
     def get_bb_ideal_grasping_region(self):
+      '''
+         Function to compute the bounding box the points corresponding to the ideal grasping region:
+      '''
       # The o3d.geometry.PointCloud() object associated with the ideal grasping region is assigned to self.ideal_grasping_region_object_frame.
       # Computing the axis aligned bounding box: 
       self.ideal_grasping_region_bounding_box = self.ideal_grasping_region_object_frame.get_axis_aligned_bounding_box()
@@ -1065,9 +1095,14 @@ class tograsp():
 
       # Using the dimensions of the newer bounding box of the ideal grasping region:
       
-    '''Function to COMPUTE end effector poses based on the predicted metric values.'''
-    # This function needs to be modified and updated: 
+    
+     
     def get_end_effector_poses(self):
+      '''
+         Function to COMPUTE end effector poses based on the predicted metric values.
+         NOTE: This function needs to be modified and updated and the current implementation is based on a heuristic to 
+         compute the end-effector poses
+      '''
 
       # Saving the sampled end effector poses:
       self.computed_end_effector_poses = []
@@ -1129,9 +1164,9 @@ class tograsp():
             self.position_C2 = np.asarray([self.ideal_grasping_region_grid_centers[i][0], self.cloud_object.transformed_vertices_object_frame[2,1], self.ideal_grasping_region_grid_centers[i][1]])
             self.grasp_center = np.add(self.position_C1, np.dot((self.cloud_object.y_dim)/2, self.z_C1)) 
 
-            self.distance_1, self.unit_u1 = self.get_distance(self.plane_points_1, self.center_point_plane_1, self.grasp_center)
-            self.distance_2, self.unit_u2 = self.get_distance(self.plane_points_2, self.center_point_plane_2, self.grasp_center)
-            self.distance_3, self.unit_u3 = self.get_distance(self.plane_points_3, self.center_point_plane_3, self.grasp_center)
+            self.distance_1, self.unit_u1 = self._get_distance(self.plane_points_1, self.center_point_plane_1, self.grasp_center)
+            self.distance_2, self.unit_u2 = self._get_distance(self.plane_points_2, self.center_point_plane_2, self.grasp_center)
+            self.distance_3, self.unit_u3 = self._get_distance(self.plane_points_3, self.center_point_plane_3, self.grasp_center)
 
             # Checking the second approach direction:
             if self.distance_1 < self.gripper_height_tolerance:
@@ -1371,9 +1406,9 @@ class tograsp():
             self.position_C2 = np.asarray([self.cloud_object.transformed_vertices_object_frame[0,0], self.ideal_grasping_region_grid_centers[i][0], self.ideal_grasping_region_grid_centers[i][1]])
             self.grasp_center = np.add(self.position_C1, np.dot((self.x_dim)/2, self.z_C1)) 
 
-            self.distance_1, self.unit_u1 = self.get_distance(self.plane_points_1, self.center_point_plane_1, self.grasp_center)
-            self.distance_2, self.unit_u2 = self.get_distance(self.plane_points_2, self.center_point_plane_2, self.grasp_center)
-            self.distance_3, self.unit_u3 = self.get_distance(self.plane_points_3, self.center_point_plane_3, self.grasp_center)
+            self.distance_1, self.unit_u1 = self._get_distance(self.plane_points_1, self.center_point_plane_1, self.grasp_center)
+            self.distance_2, self.unit_u2 = self._get_distance(self.plane_points_2, self.center_point_plane_2, self.grasp_center)
+            self.distance_3, self.unit_u3 = self._get_distance(self.plane_points_3, self.center_point_plane_3, self.grasp_center)
 
             # Checking the second approach direction:
             if self.distance_1 < self.gripper_height_tolerance:
