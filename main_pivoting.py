@@ -258,7 +258,7 @@ if __name__ == "__main__":
     # Attributes to compute the location of the reference frame at the flange for the grasp pose and pre-grasp pose
     grasp.g_delta = 0.0625
     grasp.g_delta_inter = 0.0925
-    # grasp.grasp_metric_threshold = 0.7
+    grasp.grasp_metric_threshold = 0.7
 
     # TASK: Pivoting a Cuboidal box:
     # Screw Parameters:
