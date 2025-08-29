@@ -14,7 +14,7 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from point_cloud_module.process_point_cloud import point_cloud
 
 # Functionalities for computing grasping regions and corresponding 6DOF end-effector poses:
-from point_cloud_module.tograsp import tograsp
+from point_cloud_module.tograsp_nn import tograsp
 
 from time import perf_counter
 import argparse
@@ -258,6 +258,7 @@ if __name__ == "__main__":
     # Attributes to compute the location of the reference frame at the flange for the grasp pose and pre-grasp pose
     grasp.g_delta = 0.0625
     grasp.g_delta_inter = 0.0925
+    # grasp.grasp_metric_threshold = 0.7
 
     # TASK: Pivoting a Cuboidal box:
     # Screw Parameters:
