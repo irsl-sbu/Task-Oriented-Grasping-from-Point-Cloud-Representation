@@ -16,9 +16,7 @@
 import open3d as o3d
 
 import numpy as np
-import math
 from numpy import linalg as la
-from scipy.spatial import ConvexHull
 
 # Matplotlib for plotting and visualization in Python:
 import matplotlib.pyplot as plt
